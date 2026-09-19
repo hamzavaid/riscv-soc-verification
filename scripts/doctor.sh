@@ -21,7 +21,7 @@ check_command verilator
 if [[ -x .venv/bin/python ]]; then
     printf 'ok      %-14s %s\n' '.venv' "$(.venv/bin/python --version 2>&1)"
     if .venv/bin/python -c 'import sys; raise SystemExit(sys.version_info[:2] < (3, 14))'; then
-        printf 'warning %-14s cocotb support ends at Python 3.13\n' 'Python version'
+        printf 'warning %-14s pinned cocotb predates Python 3.14\n' 'Python version'
     fi
     if .venv/bin/python -c 'import cocotb, pytest' >/dev/null 2>&1; then
         printf 'ok      %-14s cocotb and pytest import successfully\n' 'Python deps'

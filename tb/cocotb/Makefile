@@ -7,6 +7,7 @@ SIM_BUILD := $(BUILD_DIR)
 COCOTB_RESULTS_FILE := $(ARTIFACT_DIR)/results.xml
 export PROGRAM_DIR
 export PYTHONDONTWRITEBYTECODE := 1
+export PATH := $(dir $(COCOTB_CONFIG)):$(PATH)
 
 ifeq ($(SIM),icarus)
 COMPILE_ARGS += -g2012

@@ -14,7 +14,7 @@ async def reset_fetch_and_retire_addi(dut) -> None:
     memory = SingleInstructionMemory(
         Path(os.environ["PROGRAM_DIR"]) / "addi_x1_42.hex"
     )
-    cocotb.start_soon(Clock(dut.clk, 10, unit="ns").start())
+    cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
 
     dut.rst_n.value = 0
     memory.idle(dut)
@@ -28,7 +28,7 @@ async def reset_fetch_and_retire_addi(dut) -> None:
 
     await FallingEdge(dut.clk)
     dut.rst_n.value = 1
-    await Timer(1, unit="ns")
+    await Timer(1, units="ns")
     assert int(dut.imem_req_o.value) == 1
     assert int(dut.imem_addr_o.value) == 0
     memory.respond(dut)
