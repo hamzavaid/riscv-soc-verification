@@ -35,9 +35,23 @@ make doctor             # report required tool and Python dependency status
 make lint               # lint Python and compile-check SystemVerilog
 make smoke              # run the M1 cocotb test with Icarus
 make smoke SIM=verilator
+make wave               # run Icarus and write artifacts/icarus/rv32i_core.vcd
+make wave SIM=verilator # write artifacts/verilator/rv32i_core.fst
 make test               # run Python tests, lint, and both available simulators
 make clean              # remove generated output, keeping .venv
 ```
+
+Waveforms are opt-in, so normal smoke tests and regressions do not create trace
+files. `make smoke WAVES=1` is equivalent to `make wave` for the selected
+simulator. Open a generated trace with GTKWave:
+
+```sh
+gtkwave artifacts/icarus/rv32i_core.vcd
+gtkwave artifacts/verilator/rv32i_core.fst
+```
+
+GTKWave requires a working desktop display; under WSL, use WSLg or another X
+server.
 
 Generated build products live under `build/`; test reports live under
 `artifacts/`. Hand-authored RTL, testbench code, and program images remain in

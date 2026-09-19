@@ -13,6 +13,8 @@ __pycache__/
 /artifacts/
 *.fst
 *.vcd
+*.lxt
+*.lxt2
 results.xml
 
 # Editor and OS noise (project VS Code configuration is tracked)

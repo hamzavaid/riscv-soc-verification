@@ -5,8 +5,15 @@ PIP := .venv/bin/pip
 RUFF := .venv/bin/ruff
 COCOTB_CONFIG := $(abspath .venv/bin/cocotb-config)
 SIM ?= icarus
+WAVES ?= 0
 
-.PHONY: setup doctor lint smoke test clean
+ifeq ($(SIM),verilator)
+WAVE_ARTIFACT := artifacts/verilator/rv32i_core.fst
+else
+WAVE_ARTIFACT := artifacts/$(SIM)/rv32i_core.vcd
+endif
+
+.PHONY: setup doctor lint smoke wave test clean
 
 setup:
 	@./scripts/setup.sh
@@ -26,10 +33,17 @@ smoke:
 		SIM=$(SIM) \
 		PYTHON_BIN=$(abspath $(PYTHON)) \
 		COCOTB_CONFIG=$(COCOTB_CONFIG) \
+		TRACE=$(WAVES) \
 		RTL_DIR=$(abspath rtl) \
 		PROGRAM_DIR=$(abspath tests/programs) \
-		BUILD_DIR=$(abspath build/sim/$(SIM)) \
+		BUILD_DIR=$(abspath build/sim/$(SIM)$(if $(filter 1,$(WAVES)),-waves,)) \
 		ARTIFACT_DIR=$(abspath artifacts/$(SIM))
+
+wave:
+	$(RM) $(WAVE_ARTIFACT)
+	$(MAKE) smoke SIM=$(SIM) WAVES=1
+	@test -s $(WAVE_ARTIFACT) || { echo "error: waveform was not generated: $(WAVE_ARTIFACT)"; exit 1; }
+	@echo "waveform: $(WAVE_ARTIFACT)"
 
 test:
 	@test -x $(PYTHON) || { echo "error: run 'make setup' first"; exit 1; }
