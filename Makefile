@@ -22,7 +22,7 @@ lint:
 
 smoke:
 	@test -x $(COCOTB_CONFIG) || { echo "error: run 'make setup' first"; exit 1; }
-	$(MAKE) --directory tb/cocotb \
+	PATH="$(abspath .venv/bin):$$PATH" $(MAKE) --directory tb/cocotb \
 		SIM=$(SIM) \
 		PYTHON_BIN=$(abspath $(PYTHON)) \
 		COCOTB_CONFIG=$(COCOTB_CONFIG) \
