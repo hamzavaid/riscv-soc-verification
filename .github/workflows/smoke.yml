@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  m1-smoke:
+  m2-regression:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -20,5 +20,5 @@ jobs:
         run: make setup
       - name: Check environment
         run: make doctor
-      - name: Run M1 checks
+      - name: Run M1 and M2 checks
         run: make test

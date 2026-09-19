@@ -15,7 +15,7 @@ else
 WAVE_ARTIFACT := artifacts/$(SIM)/rv32i_core.vcd
 endif
 
-.PHONY: setup doctor lint smoke directed wave test clean
+.PHONY: setup doctor lint smoke directed wave directed-wave test clean
 
 setup:
 	@./scripts/setup.sh
@@ -46,6 +46,11 @@ smoke:
 
 directed:
 	$(MAKE) smoke SIM=$(SIM) \
+		COCOTB_MODULE=test_m2_directed \
+		RESULTS_FILE=directed-results.xml
+
+directed-wave:
+	$(MAKE) wave SIM=$(SIM) \
 		COCOTB_MODULE=test_m2_directed \
 		RESULTS_FILE=directed-results.xml
 
