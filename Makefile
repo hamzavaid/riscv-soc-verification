@@ -6,6 +6,8 @@ RUFF := .venv/bin/ruff
 COCOTB_CONFIG := $(abspath .venv/bin/cocotb-config)
 SIM ?= icarus
 WAVES ?= 0
+COCOTB_MODULE ?= test_m1_smoke
+RESULTS_FILE ?= results.xml
 
 ifeq ($(SIM),verilator)
 WAVE_ARTIFACT := artifacts/verilator/rv32i_core.fst
@@ -13,7 +15,7 @@ else
 WAVE_ARTIFACT := artifacts/$(SIM)/rv32i_core.vcd
 endif
 
-.PHONY: setup doctor lint smoke wave test clean
+.PHONY: setup doctor lint smoke directed wave test clean
 
 setup:
 	@./scripts/setup.sh
@@ -33,11 +35,19 @@ smoke:
 		SIM=$(SIM) \
 		PYTHON_BIN=$(abspath $(PYTHON)) \
 		COCOTB_CONFIG=$(COCOTB_CONFIG) \
+		MODULE=$(COCOTB_MODULE) \
+		RESULTS_FILE=$(RESULTS_FILE) \
 		TRACE=$(WAVES) \
 		RTL_DIR=$(abspath rtl) \
 		PROGRAM_DIR=$(abspath tests/programs) \
 		BUILD_DIR=$(abspath build/sim/$(SIM)$(if $(filter 1,$(WAVES)),-waves,)) \
 		ARTIFACT_DIR=$(abspath artifacts/$(SIM))
+	$(PYTHON) scripts/check_results.py artifacts/$(SIM)/$(RESULTS_FILE)
+
+directed:
+	$(MAKE) smoke SIM=$(SIM) \
+		COCOTB_MODULE=test_m2_directed \
+		RESULTS_FILE=directed-results.xml
 
 wave:
 	$(RM) $(WAVE_ARTIFACT)
@@ -50,8 +60,9 @@ test:
 	PYTHONDONTWRITEBYTECODE=1 $(PYTHON) -m pytest -q -p no:cacheprovider
 	$(MAKE) lint
 	$(MAKE) smoke SIM=icarus
+	$(MAKE) directed SIM=icarus
 	@if command -v verilator >/dev/null 2>&1; then \
-		$(MAKE) smoke SIM=verilator; \
+		$(MAKE) smoke SIM=verilator && $(MAKE) directed SIM=verilator; \
 	else \
 		echo "note: verilator not found; skipping optional second simulator"; \
 	fi

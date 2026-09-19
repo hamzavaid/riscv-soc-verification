@@ -1,11 +1,13 @@
 TOPLEVEL_LANG := verilog
 TOPLEVEL := rv32i_core
-MODULE := test_m1_smoke
+MODULE ?= test_m1_smoke
+RESULTS_FILE ?= results.xml
 
 VERILOG_SOURCES := $(RTL_DIR)/rv32i_core.sv
 SIM_BUILD := $(BUILD_DIR)
-COCOTB_RESULTS_FILE := $(ARTIFACT_DIR)/results.xml
+COCOTB_RESULTS_FILE := $(ARTIFACT_DIR)/$(RESULTS_FILE)
 export PROGRAM_DIR
+export ARTIFACT_DIR
 export PYTHONDONTWRITEBYTECODE := 1
 
 # cocotb 1.9's Icarus WAVES mode forces FST. Keep it disabled and use TRACE
