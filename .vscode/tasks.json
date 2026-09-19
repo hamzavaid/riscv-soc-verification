@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "M0/M1: setup",
+      "type": "shell",
+      "command": "make setup",
+      "problemMatcher": []
+    },
+    {
+      "label": "M0/M1: doctor",
+      "type": "shell",
+      "command": "make doctor",
+      "problemMatcher": []
+    },
+    {
+      "label": "M0/M1: lint",
+      "type": "shell",
+      "command": "make lint",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "M0/M1: smoke",
+      "type": "shell",
+      "command": "make smoke",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

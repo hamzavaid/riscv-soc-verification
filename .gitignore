@@ -1,0 +1,21 @@
+# Internal planning and source specification are intentionally not published.
+/docs/
+
+# Python environment and caches
+/.venv/
+__pycache__/
+*.py[cod]
+/.pytest_cache/
+/.ruff_cache/
+
+# Generated simulation, test, and waveform output
+/build/
+/artifacts/
+*.fst
+*.vcd
+results.xml
+
+# Editor and OS noise (project VS Code configuration is tracked)
+.DS_Store
+*~
+*.swp

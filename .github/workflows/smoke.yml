@@ -1,0 +1,24 @@
+name: smoke
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  m1-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install simulators
+        run: sudo apt-get update && sudo apt-get install --yes iverilog verilator
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Set up Python environment
+        run: make setup
+      - name: Check environment
+        run: make doctor
+      - name: Run M1 checks
+        run: make test
